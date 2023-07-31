@@ -39,7 +39,6 @@ namespace SimpleBankAPI.Controllers
                     _ => throw e
                 };
             }
-            
         }
         
         /// <summary>

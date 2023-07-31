@@ -47,7 +47,7 @@ public class AccountsService: IAccountsService
     /// </summary>
     /// <param name="id">The account Id</param>
     /// <returns>The account details</returns>
-    public async ValueTask<Account?> FindAccount(Guid id)
+    public async ValueTask<Account> FindAccount(Guid id)
     {
         var account = await _accountsRepository.Get(id);
         if (account is null)
@@ -65,7 +65,7 @@ public class AccountsService: IAccountsService
     /// <param name="amount">The amount to be deposited</param>
     /// <returns>The account details following the deposit</returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public async Task<Account?> DepositFunds(Guid id, decimal amount)
+    public async Task<Account> DepositFunds(Guid id, decimal amount)
     {
         _validators[Amount]?.Validate(amount);
         var account = await _accountsRepository.Get(id);
@@ -86,7 +86,7 @@ public class AccountsService: IAccountsService
     /// <returns>The account details following the withdraw</returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public async Task<Account?> WithdrawFunds(Guid id, decimal amount)
+    public async Task<Account> WithdrawFunds(Guid id, decimal amount)
     {
         _validators[Amount]?.Validate(amount);
         var account = await _accountsRepository.Get(id);
