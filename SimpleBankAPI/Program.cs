@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using SimpleBankAPI.Clients;
 using SimpleBankAPI.Interfaces;
@@ -23,6 +24,12 @@ services.AddHttpClient<ICurrencyRate, CurrencyClient>(client =>
 services.AddSingleton<IFactory<IValidator?>, ValidatorFactory>();
 services.AddTransient<IAccountsRepository, AccountsRepository>();
 services.AddTransient<IAccountsService, AccountsService>();
+
+services.AddSwaggerGen(c =>
+{
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, 
+        $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+});
 
 var app = builder.Build();
 
