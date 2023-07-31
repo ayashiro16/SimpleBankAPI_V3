@@ -24,12 +24,12 @@ services.AddHttpClient<ICurrencyRate, CurrencyClient>(client =>
 services.AddSingleton<IFactory<IValidator?>, ValidatorFactory>();
 services.AddTransient<IAccountsRepository, AccountsRepository>();
 services.AddTransient<IAccountsService, AccountsService>();
-
 services.AddSwaggerGen(c =>
 {
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, 
         $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 });
+services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
