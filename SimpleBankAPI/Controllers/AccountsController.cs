@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankAPI.Interfaces;
 using SimpleBankAPI.Models.Requests;
@@ -9,6 +10,7 @@ using SimpleBankAPI.Models.Responses.DTOs;
 namespace SimpleBankAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AccountsController : ControllerBase
     {
