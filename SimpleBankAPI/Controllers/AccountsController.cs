@@ -1,9 +1,10 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SimpleBankAPI.Interfaces;
 using SimpleBankAPI.Models.Requests;
 using SimpleBankAPI.Models.Responses;
 using SimpleBankAPI.Exceptions;
-using Account = SimpleBankAPI.Models.Entities.Account;
+using SimpleBankAPI.Models.Responses.DTOs;
 
 namespace SimpleBankAPI.Controllers
 {
@@ -12,10 +13,12 @@ namespace SimpleBankAPI.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IAccountsService _accountsService;
+        private readonly IMapper _mapper;
         
-        public AccountsController(IAccountsService accountsService)
+        public AccountsController(IAccountsService accountsService, IMapper mapper)
         {
             _accountsService = accountsService;
+            _mapper = mapper;
         }
         
         /// <summary>
@@ -24,12 +27,12 @@ namespace SimpleBankAPI.Controllers
         /// <param name="id">The account ID</param>
         /// <returns>The account associated with the provided ID</returns>
         [HttpGet("{id:Guid}")]
-        public async Task<ActionResult<Account>> GetAccount(Guid id)
+        public async Task<ActionResult<AccountDto>> GetAccount(Guid id)
         {
             try
             {
                 var account = await _accountsService.FindAccount(id);
-                return account;
+                return _mapper.Map<AccountDto>(account);
             }
             catch (Exception e)
             {
@@ -71,15 +74,15 @@ namespace SimpleBankAPI.Controllers
         /// <summary>
         /// Create and store a new account with the provided user's name
         /// </summary>
-        /// <param name="request">The string "Name" of the account holder</param>
+        /// <param name="request">The name of the account holder</param>
         /// <returns>The account details of the newly created account</returns>
         [HttpPost]
-        public async Task<ActionResult<Account>> PostNewAccount([FromBody] CreateAccount request)
+        public async Task<ActionResult<AccountDto>> PostNewAccount([FromBody] CreateAccount request)
         {
             try
             {
                 var account = await _accountsService.CreateAccount(request.Name);
-                return account;
+                return _mapper.Map<AccountDto>(account);
             }
             catch (Exception e)
             {
@@ -95,15 +98,15 @@ namespace SimpleBankAPI.Controllers
         /// Creates deposit to add funds to an account
         /// </summary>
         /// <param name="id">The account ID</param>
-        /// <param name="request">The decimal "Amount" to be withdrawn</param>
+        /// <param name="request">The amount to be deposited</param>
         /// <returns>The account details of the account following the deposit</returns>
         [HttpPost("{id:Guid}/deposits")]
-        public async Task<ActionResult<Account>> PostDepositFunds(Guid id, [FromBody] GetAmount request)
+        public async Task<ActionResult<AccountBalanceDto>> PostDepositFunds(Guid id, [FromBody] GetAmount request)
         {
             try
             {
                 var account = await _accountsService.DepositFunds(id, request.Amount);
-                return account;
+                return _mapper.Map<AccountBalanceDto>(account);
             }
             catch (Exception e)
             {
@@ -120,15 +123,15 @@ namespace SimpleBankAPI.Controllers
         /// Creates withdrawal to take from an account
         /// </summary>
         /// <param name="id">The account ID</param>
-        /// <param name="request">The decimal "Amount" to be withdrawn</param>
+        /// <param name="request">The amount to be withdrawn</param>
         /// <returns>The account details of the account following the withdrawal</returns>
         [HttpPost("{id:Guid}/withdrawals")]
-        public async Task<ActionResult<Account>> PostWithdrawFunds(Guid id, [FromBody] GetAmount request)
+        public async Task<ActionResult<AccountBalanceDto>> PostWithdrawFunds(Guid id, [FromBody] GetAmount request)
         {
             try
             {
                 var account = await _accountsService.WithdrawFunds(id, request.Amount);
-                return account;
+                return _mapper.Map<AccountBalanceDto>(account);
             }
             catch (Exception e)
             {
@@ -145,7 +148,7 @@ namespace SimpleBankAPI.Controllers
         /// <summary>
         /// Creates a transfer that takes funds from sender account and deposits to receiver account
         /// </summary>
-        /// <param name="request">Sender's account ID: "SenderId", Recipient's account ID: "RecipientId", and decimal "Amount" to be transferred</param>
+        /// <param name="request">Sender's account ID, Recipient's account ID, and amount to be transferred</param>
         /// <returns>The account details of both the sender and the recipient following the transfer</returns>
         [HttpPost("transfers")]
         public async Task<ActionResult<Transfer>> PostTransferFunds([FromBody] TransferFunds request)
