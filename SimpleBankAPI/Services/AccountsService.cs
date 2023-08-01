@@ -1,7 +1,9 @@
 using SimpleBankAPI.Exceptions;
 using SimpleBankAPI.Interfaces;
+using SimpleBankAPI.Models.Requests;
 using SimpleBankAPI.Models.Responses;
 using Account = SimpleBankAPI.Models.Entities.Account;
+using PaginationMetadata =  SimpleBankAPI.Models.PaginationMetadata;
 
 namespace SimpleBankAPI.Services;
 
@@ -14,6 +16,7 @@ public class AccountsService: IAccountsService
     private const string Amount = "Amount";
     private const string CurrencyCode = "CurrencyCode";
     private const string SufficientFunds = "SufficientFunds";
+    private const string Query = "Query";
 
     public AccountsService(IAccountsRepository accountsRepository, ICurrencyRate currencyRate, IFactory<IValidator?> validators)
     {
@@ -33,7 +36,7 @@ public class AccountsService: IAccountsService
         _validators[Username]?.Validate(name);
         var account = new Account()
         {
-            Name = name, 
+            Name = name.Trim(), 
             Balance = 0, 
             Id = Guid.NewGuid()
         };
@@ -56,6 +59,19 @@ public class AccountsService: IAccountsService
         }
 
         return account;
+    }
+
+    /// <summary>
+    /// Gets all accounts that fit the provided queries
+    /// </summary>
+    /// <param name="query">The filtering, searching, sorting, and pagination specifications; can all be null</param>
+    /// <returns>The list of accounts and the pagination metadata</returns>
+    public (IEnumerable<Account>, PaginationMetadata) GetAllAccounts(GetAccountsQuery query)
+    {
+        _validators[Query]?.Validate(query);
+        var (accounts, paginationMetadata) = _accountsRepository.GetAll(query);
+
+        return (accounts, paginationMetadata);
     }
     
     /// <summary>

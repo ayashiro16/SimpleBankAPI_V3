@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,25 @@ namespace SimpleBankAPI.Controllers
                 };
             }
         }
-        
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<AccountDto>>> GetAllAccounts([FromQuery] GetAccountsQuery query)
+        {
+            try
+            {
+                var (accounts, paginationMetadata) = _accountsService.GetAllAccounts(query);
+                Response.Headers.Add("X-Pagination",
+                    JsonSerializer.Serialize(paginationMetadata));
+                
+                return _mapper.Map<List<AccountDto>>(accounts);
+            }
+            catch (Exception e)
+            {
+                //TODO
+                return NotFound(e.Message);
+            }
+        }
+
         /// <summary>
         /// Retrieves the converted account balances for a given list of currencies
         /// </summary>

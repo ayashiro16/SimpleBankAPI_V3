@@ -12,4 +12,6 @@ public class AccountContext : DbContext
     public void Add(Account account) => Accounts.Add(account);
 
     public ValueTask<Account?> FindAsync(Guid id) => Accounts.FindAsync(id);
+
+    public IQueryable<Account> GetAll() => Accounts;
 }
