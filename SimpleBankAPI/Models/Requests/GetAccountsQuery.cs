@@ -4,6 +4,8 @@ namespace SimpleBankAPI.Models.Requests;
 
 public class GetAccountsQuery
 {
+    private int _pageSize = 10;
+    
     /// <summary>
     /// filter for names that contain this string
     /// </summary>
@@ -29,6 +31,16 @@ public class GetAccountsQuery
     public string? SortOrder { get; init; }
 
     public int CurrentPage { get; set; } = 1;
-    
-    public int PageSize { get; set; } = 10;
+
+    public int PageSize
+    {
+        get => _pageSize;
+        set
+        {
+            if (value is > 0 and <= 100)
+            {
+                _pageSize = value;
+            }
+        }
+    }
 }

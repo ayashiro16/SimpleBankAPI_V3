@@ -16,8 +16,9 @@ var currencyKey = builder.Configuration.GetValue<string>("CURRENCY_API_KEY");
 var services = builder.Services;
 
 services.AddControllers();
-services.AddDbContext<AccountContext>(opt =>
-    opt.UseInMemoryDatabase("Accounts"));
+services.AddDbContext<AccountContext>(dbContextOptions =>
+    dbContextOptions.UseSqlite(
+        builder.Configuration["ConnectionStrings:SimpleBankDBConnectionString"]));
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddSingleton<ICurrencyRate, CurrencyClient>();
