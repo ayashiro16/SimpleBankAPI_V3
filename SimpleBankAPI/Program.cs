@@ -9,13 +9,18 @@ using SimpleBankAPI.Repositories;
 using SimpleBankAPI.Services;
 using SimpleBankAPI.Data;
 using SimpleBankAPI.Factories;
+using SimpleBankAPI.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 var currencyKey = builder.Configuration.GetValue<string>("CURRENCY_API_KEY");
 
 var services = builder.Services;
 
-services.AddControllers();
+services.AddControllers(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.ReturnHttpNotAcceptable = true;
+}).AddMvcOptions(options => options.OutputFormatters.Add(new CsvOutputFormatter()));
 services.AddDbContext<AccountContext>(dbContextOptions =>
     dbContextOptions.UseSqlite(
         builder.Configuration["ConnectionStrings:SimpleBankDBConnectionString"]));
