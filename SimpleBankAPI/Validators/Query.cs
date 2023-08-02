@@ -20,7 +20,7 @@ public class Query : Interfaces.IValidator
         {
             throw new ArgumentOutOfRangeException(nameof(currentPage), "Page number must be greater than 1");
         }
-        if (pageSize < 1)
+        if (pageSize < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 1");
         }

@@ -34,7 +34,7 @@ public class AccountsRepository : IAccountsRepository
         }
         if (!string.IsNullOrEmpty(query.SearchTerm))
         {
-            collection = collection.Where(account => string.Equals(account.Name, query.SearchTerm.Trim(), StringComparison.CurrentCultureIgnoreCase));
+            collection = collection.Where(account => string.Equals(account.Name.ToUpper(), query.SearchTerm.Trim().ToUpper()));
         }
         collection = query.SortBy?.ToUpper().Trim() switch
         {
@@ -42,12 +42,15 @@ public class AccountsRepository : IAccountsRepository
             ("NAME") => collection.OrderBy(account => account.Name),
             _ => collection.OrderBy(account => account.Id)
         };
-        if (query.SortOrder == "DESC")
+        if (query.SortOrder?.ToUpper().Trim() == "DESC")
         {
             collection = collection.Reverse();
         }
         var paginationMetadata = new PaginationMetadata(collection.Count(), query.PageSize, query.CurrentPage);
-        var result = collection.Skip(query.PageSize * (query.CurrentPage - 1)).Take(query.PageSize).ToList();
+        var currentPage = query.CurrentPage > paginationMetadata.TotalPageCount
+            ? paginationMetadata.TotalPageCount
+            : query.CurrentPage;
+        var result = collection.Skip(query.PageSize * (currentPage - 1)).Take(query.PageSize).ToList();
 
         return (result, paginationMetadata);
     }
