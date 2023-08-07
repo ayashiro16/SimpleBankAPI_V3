@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace SimpleBankAPI.Controllers;
 
 [Route("api/authentication")]
+[Produces("text/plain")]
 [ApiController]
 
 public class AuthenticationController : ControllerBase
