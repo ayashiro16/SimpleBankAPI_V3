@@ -1,3 +1,4 @@
+using SimpleBankAPI.ExceptionHandlers;
 using SimpleBankAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseExceptionHandler("/errorhandler/error-development");
+    app.UseDeveloperExceptionPage();
 }
 else
 {
-    app.UseExceptionHandler("/errorhandler/error"); 
+    // app.UseSwagger();
+    // app.UseSwaggerUI();
+    app.AddErrorHandler();
 }
 
 app.UseHttpsRedirection();
