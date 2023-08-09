@@ -1,6 +1,6 @@
 namespace SimpleBankAPI.Models.Responses.DTOs;
 
-public record AccountDto
+public class AccountDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; }

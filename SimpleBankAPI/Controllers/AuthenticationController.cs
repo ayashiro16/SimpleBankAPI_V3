@@ -17,7 +17,11 @@ public class AuthenticationController : ControllerBase
     {
         _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
     }
-    
+      
+    /// <summary>
+    /// Creates authentication token
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("authenticate")]
     public ActionResult<string> Authenticate()
     {
