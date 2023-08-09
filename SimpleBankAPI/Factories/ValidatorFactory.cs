@@ -18,4 +18,6 @@ public class ValidatorFactory : Interfaces.IFactory<IValidator?>
             .Cast<IValidator>()
             .ToImmutableDictionary(x => x.GetType().Name, x => x);
     }
+    
+    public bool ContainsKey(string key) => _validators.ContainsKey(key);
 }

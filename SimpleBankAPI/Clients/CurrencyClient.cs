@@ -4,7 +4,7 @@ using ICurrencyRate = SimpleBankAPI.Interfaces.ICurrencyRate;
 
 namespace SimpleBankAPI.Clients;
 
-public class CurrencyClient: ICurrencyRate
+public class CurrencyClient : ICurrencyRate
 {
     private readonly HttpClient _currencyClient;
 

@@ -38,6 +38,7 @@ public static class Register
         services.AddHttpClient<ICurrencyRate, CurrencyClient>(client => 
         client.BaseAddress = new Uri($"https://api.freecurrencyapi.com/v1/latest?apikey={configuration.GetValue<string>("CURRENCY_API_KEY")}"));
         services.AddSingleton<IFactory<IValidator?>, ValidatorFactory>();
+        services.AddSingleton<IFactory<IFormatter?>, FormatterFactory>();
         services.AddTransient<IAccountsRepository, AccountsRepository>();
         services.AddTransient<IAccountsService, AccountsService>();
         services.AddSwaggerGen(opt =>
