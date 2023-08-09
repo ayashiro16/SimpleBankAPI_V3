@@ -16,7 +16,6 @@ public class FormatterFactory : Interfaces.IFactory<IFormatter>
             .Select(x => Activator.CreateInstance(x))
             .Cast<IFormatter>()
             .ToImmutableDictionary(x => x.GetType().Name, x => x);
-        Console.WriteLine("The number of formatters is: " + _formatters.Count);
     }
 
     public bool ContainsKey(string key) => _formatters.ContainsKey(key);

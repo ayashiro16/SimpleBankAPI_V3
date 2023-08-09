@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
@@ -15,7 +14,6 @@ public class CsvOutputFormatter : TextOutputFormatter
     public CsvOutputFormatter()
     {
         _formatters = new FormatterFactory();
-        Console.WriteLine("At creation, formatter has the account formatter " + _formatters["AccountsDto"]);
         SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
         SupportedEncodings.Add(Encoding.UTF8);
         SupportedEncodings.Add(Encoding.Unicode);
@@ -25,15 +23,19 @@ public class CsvOutputFormatter : TextOutputFormatter
     {
         var response = context.HttpContext.Response;
         var buffer = new StringBuilder();
+        if (response.StatusCode != 200)
+        {
+            buffer.Append(context.Object);
+            await response.WriteAsync(buffer.ToString(), selectedEncoding);
+            return;
+        }
         var type = context.Object.GetType();
-        Console.WriteLine(type);
         if (typeof(IEnumerable).IsAssignableFrom(type))
         {
             var collection = (IEnumerable<object>)context.Object;
             type = collection.GetType()
                 .GetGenericArguments()
                 .FirstOrDefault(x => _formatters.ContainsKey(x.Name));
-            Console.WriteLine("The type in this collection is: " + type);
             var formatter = _formatters[type.Name];
             foreach (var item in collection)
             {
@@ -42,7 +44,6 @@ public class CsvOutputFormatter : TextOutputFormatter
         }
         else
         {
-            Console.WriteLine(context.Object.GetType().Name);
             var formatter = _formatters[context.Object.GetType().Name];
             formatter.Format(buffer, context.Object!);
         }
