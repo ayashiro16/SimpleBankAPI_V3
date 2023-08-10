@@ -36,9 +36,5 @@ public class AccountContext : DbContext
                 Balance = 25000,
                 Id = Guid.NewGuid()
             });
-        modelBuilder.Entity<Account>()
-            .Property(e => e.Balance)
-            .HasConversion<double>();
-        base.OnModelCreating(modelBuilder);
     }
 }
