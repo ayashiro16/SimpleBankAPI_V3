@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SimpleBankAPI.Clients;
@@ -8,6 +7,7 @@ using SimpleBankAPI.Interfaces;
 using SimpleBankAPI.Repositories;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using SimpleBankAPI.Formatters;
 using SimpleBankAPI.Data;
 using SimpleBankAPI.Factories;
@@ -30,8 +30,8 @@ public static class Register
             options.OutputFormatters.Add(new CsvOutputFormatter());
         });
         services.AddDbContext<AccountContext>(dbContextOptions =>
-            dbContextOptions.UseSqlite(
-                configuration["ConnectionStrings:SimpleBankDBConnectionString"]));
+            dbContextOptions.UseSqlServer(
+                configuration.GetConnectionString("AccountContext")));
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddSingleton<ICurrencyRate, CurrencyClient>();
