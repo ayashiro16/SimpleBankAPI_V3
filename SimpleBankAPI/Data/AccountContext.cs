@@ -15,30 +15,30 @@ public class AccountContext : DbContext
 
     public IQueryable<Account> GetAll() => Accounts.AsQueryable();
 
-    // protected override void OnModelCreating(ModelBuilder modelBuilder)
-    // {
-    //     modelBuilder.Entity<Account>().HasData(
-    //         new Account()
-    //         {
-    //             Name = "Lazy Susan",
-    //             Balance = 100,
-    //             Id = Guid.NewGuid()
-    //         },
-    //         new Account()
-    //         {
-    //             Name = "John Deere",
-    //             Balance = 5000,
-    //             Id = Guid.NewGuid()
-    //         },
-    //         new Account()
-    //         {
-    //             Name = "Mary Poppins",
-    //             Balance = 25000,
-    //             Id = Guid.NewGuid()
-    //         });
-    //     modelBuilder.Entity<Account>()
-    //         .Property(e => e.Balance)
-    //         .HasConversion<double>();
-    //     base.OnModelCreating(modelBuilder);
-    // }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Account>().HasData(
+            new Account()
+            {
+                Name = "Lazy Susan",
+                Balance = 100,
+                Id = Guid.NewGuid()
+            },
+            new Account()
+            {
+                Name = "John Deere",
+                Balance = 5000,
+                Id = Guid.NewGuid()
+            },
+            new Account()
+            {
+                Name = "Mary Poppins",
+                Balance = 25000,
+                Id = Guid.NewGuid()
+            });
+        modelBuilder.Entity<Account>()
+            .Property(e => e.Balance)
+            .HasConversion<double>();
+        base.OnModelCreating(modelBuilder);
+    }
 }

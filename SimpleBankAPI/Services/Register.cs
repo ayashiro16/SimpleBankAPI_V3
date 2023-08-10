@@ -32,7 +32,6 @@ public static class Register
         services.AddDbContext<AccountContext>(dbContextOptions =>
             dbContextOptions.UseSqlServer(
                 configuration.GetConnectionString("AccountContext")));
-        
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
         services.AddSingleton<ICurrencyRate, CurrencyClient>();
