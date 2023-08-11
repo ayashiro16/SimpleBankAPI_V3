@@ -6,7 +6,8 @@ namespace SimpleBankAPI.Factories;
 public class FormatterFactory : Interfaces.IFactory<IFormatter>
 {
     private readonly IReadOnlyDictionary<string, IFormatter> _formatters;
-    public IFormatter this[string key] => _formatters!.GetValueOrDefault(key);
+    
+    public IFormatter? this[string key] => _formatters!.GetValueOrDefault(key);
 
     public FormatterFactory()
     {

@@ -6,7 +6,7 @@ namespace SimpleBankAPI.Factories;
 public class ValidatorFactory : Interfaces.IFactory<IValidator?>
 {
     private readonly IReadOnlyDictionary<string, IValidator> _validators;
-
+    
     public IValidator? this[string key] => _validators!.GetValueOrDefault(key);
 
     public ValidatorFactory()

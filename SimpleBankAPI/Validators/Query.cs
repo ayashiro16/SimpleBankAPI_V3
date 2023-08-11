@@ -17,15 +17,14 @@ public class Query : Interfaces.IValidator
         var pageSize = ((GetAccountsQuery)query).PageSize;
         if (currentPage < 1)
         {
-            throw new ArgumentOutOfRangeException(nameof(currentPage), "Page number must be greater than 1");
+            throw new ArgumentOutOfRangeException(nameof(currentPage), "Page number must be greater than 0");
         }
-        if (pageSize < 0)
+        if (pageSize < 1)
         {
-            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 1");
+            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than 0");
         }
         var sortBy = ((GetAccountsQuery)query).SortBy?.ToUpper().Trim();
         var order = ((GetAccountsQuery)query).SortOrder?.ToUpper().Trim();
-
         if (!string.IsNullOrEmpty(sortBy) && sortBy is not ("NAME" or "BALANCE"))
         {
             throw new ArgumentException("Must sort by one of the allowed values or leave the field empty.");

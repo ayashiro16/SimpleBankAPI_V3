@@ -47,9 +47,7 @@ public class AccountsRepository : IAccountsRepository
             collection = collection.Reverse();
         }
         var paginationMetadata = new PaginationMetadata(collection.Count(), query.PageSize, query.CurrentPage);
-        var currentPage = query.CurrentPage > paginationMetadata.TotalPageCount
-            ? paginationMetadata.TotalPageCount
-            : query.CurrentPage;
+        var currentPage =  query.CurrentPage;
         var result = collection.Skip(query.PageSize * (currentPage - 1)).Take(query.PageSize).ToList();
 
         return (result, paginationMetadata);
