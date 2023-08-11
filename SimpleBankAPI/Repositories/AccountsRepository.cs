@@ -24,10 +24,6 @@ public class AccountsRepository : IAccountsRepository
     public (List<Account>, PaginationMetadata) GetAll(GetAccountsQuery query)
     {
         var collection = _context.GetAll();
-        if (!collection.Any())
-        {
-            throw new NoAccountsException();
-        }
         if (!string.IsNullOrEmpty(query.FilterTerm))
         {
             collection = collection.Where(account => account.Name.ToUpper().Contains(query.FilterTerm.Trim().ToUpper()));
@@ -35,6 +31,10 @@ public class AccountsRepository : IAccountsRepository
         if (!string.IsNullOrEmpty(query.SearchTerm))
         {
             collection = collection.Where(account => string.Equals(account.Name.ToUpper(), query.SearchTerm.Trim().ToUpper()));
+        }
+        if (!collection.Any())
+        {
+            throw new NoResultsException();
         }
         collection = query.SortBy?.ToUpper().Trim() switch
         {

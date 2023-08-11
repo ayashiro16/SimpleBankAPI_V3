@@ -1,5 +1,4 @@
 using System.Text;
-using AccountDto = SimpleBankAPI.Models.Responses.DTOs.AccountDto;
 
 namespace SimpleBankAPI.Formatters.CsvFormatters;
 

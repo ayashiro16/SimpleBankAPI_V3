@@ -55,11 +55,24 @@ namespace SimpleBankAPI.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<AccountDto>>> GetAllAccounts([FromQuery] GetAccountsQuery query)
         {
-            var (accounts, paginationMetadata) = _accountsService.GetAllAccounts(query);
+            try
+            {
+                var (accounts, paginationMetadata) = _accountsService.GetAllAccounts(query);
                 Response.Headers.Add("X-Pagination",
                     JsonSerializer.Serialize(paginationMetadata));
-                
-            return _mapper.Map<List<AccountDto>>(accounts); 
+
+                return _mapper.Map<List<AccountDto>>(accounts);
+            }
+            catch(Exception e)
+            {
+                return e switch
+                {
+                    ArgumentOutOfRangeException => BadRequest(e.Message),
+                    ArgumentException => BadRequest(e.Message),
+                    NoResultsException => NoContent(),
+                    _ => throw e
+                };
+            }
         }
 
         /// <summary>

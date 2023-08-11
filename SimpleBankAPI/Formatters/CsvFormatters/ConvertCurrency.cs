@@ -1,5 +1,4 @@
 using System.Text;
-using ConvertCurrency= SimpleBankAPI.Models.Responses.ConvertCurrency;
 
 namespace SimpleBankAPI.Formatters.CsvFormatters;
 
