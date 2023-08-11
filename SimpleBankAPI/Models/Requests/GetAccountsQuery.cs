@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace SimpleBankAPI.Models.Requests;
 
 public class GetAccountsQuery

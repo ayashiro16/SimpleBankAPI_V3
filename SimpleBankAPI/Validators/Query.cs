@@ -1,5 +1,4 @@
-using SimpleBankAPI.Models;
-using SimpleBankAPI.Models.Requests;
+using GetAccountsQuery = SimpleBankAPI.Models.Requests.GetAccountsQuery;
 
 namespace SimpleBankAPI.Validators;
 
