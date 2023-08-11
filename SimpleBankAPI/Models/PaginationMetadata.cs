@@ -1,11 +1,11 @@
 namespace SimpleBankAPI.Models;
 
-public class PaginationMetadata
+public record PaginationMetadata
 {
-    public int TotalItemCount { get; set; }
-    public int TotalPageCount { get; set; }
-    public int PageSize { get; set; }
-    public int CurrentPage { get; set; }
+    public int TotalItemCount { get; init; }
+    public int TotalPageCount { get; init; }
+    public int PageSize { get; init; }
+    public int CurrentPage { get; init; }
 
     public PaginationMetadata(int totalItemCount, int pageSize, int currentPage)
     {

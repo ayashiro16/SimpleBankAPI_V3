@@ -29,17 +29,19 @@ public class CsvOutputFormatter : TextOutputFormatter
             await response.WriteAsync(buffer.ToString(), selectedEncoding);
             return;
         }
-        var type = context.Object.GetType();
-        if (typeof(IEnumerable).IsAssignableFrom(type))
+        if (context.Object is IEnumerable)
         {
             var collection = (IEnumerable<object>)context.Object;
-            type = collection.GetType()
+            var key = collection.GetType()
                 .GetGenericArguments()
-                .FirstOrDefault(x => _formatters.ContainsKey(x.Name));
-            var formatter = _formatters[type.Name];
-            foreach (var item in collection)
+                .FirstOrDefault(x => _formatters.ContainsKey(x.Name))?.Name;
+            if (key is not null)
             {
-                formatter.Format(buffer, item);
+                var formatter = _formatters[key];
+                foreach (var item in collection)
+                {
+                    formatter.Format(buffer, item);
+                }
             }
         }
         else
